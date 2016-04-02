@@ -9,8 +9,10 @@ AI support Zen. Lighting and Snow mode only.
 AI can run on the resolution of Bejeweled 3 windows is 1024 x 768 only and the resolution of windows is 1920 x 1080 
 
 It is simple algorithm as follows
+
 1. Identify gem color on the board.
 2. find possile move - if found, it swap gem 
 
 To run this
-python bj3ai.py 2 <--- run it for 2 minutes
+
+    python bj3ai.py 2 <--- run for 2 minutes
