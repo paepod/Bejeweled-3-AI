@@ -16,3 +16,8 @@ It is simple algorithm as follows
 To run this
 
     python bj3ai.py 2 <--- run for 2 minutes
+
+###Here is the examples
+[Snow mode](https://youtu.be/TzFwZ27kYVc)
+
+[Lightning mode](https://youtu.be/_6WD8ELzQOc)
