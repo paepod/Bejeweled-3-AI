@@ -15,32 +15,39 @@ def mouse_click(x,y):
     mouse_move(x,y)
     autopy.mouse.click()
 
-def find_start_location():
+def find_start_location(minutes=1):
     global im_path, im_lightning_path, im_snow_path
     path = im_path
     img_start = autopy.bitmap.Bitmap.open(im_path)
     pos = None
-    while pos == None:
-        pos = autopy.bitmap.capture_screen().find_bitmap(img_start)
-        if pos != None and path == im_path:
-            mouse_click(pos[0],pos[1])
-            return (pos[0] + 252 , pos[1] - 439, pos[0] + 262,  pos[1] - 423)
-        elif pos != None and path == im_snow_path:
-            mouse_click(pos[0],pos[1])
-            return (pos[0] + 109 , pos[1] - 398, pos[0] + 129,  pos[1] - 375)
-        elif pos != None and path == im_lightning_path:
-            mouse_click(pos[0],pos[1])
-            return (pos[0] + 84 , pos[1] + 111, pos[0] + 124,  pos[1] + 133)
+    try:
+        t_end = time.time() + 60 * float(minutes)
+        while time.time() < t_end and pos == None:
+            print path
+            pos = autopy.bitmap.capture_screen().find_bitmap(img_start)
+            if pos != None and path == im_path:
+                mouse_click(pos[0],pos[1])
+                return (pos[0] + 252 , pos[1] - 439, pos[0] + 262,  pos[1] - 423)
+            elif pos != None and path == im_snow_path:
+                mouse_click(pos[0],pos[1])
+                return (pos[0] + 109 , pos[1] - 398, pos[0] + 129,  pos[1] - 375)
+            elif pos != None and path == im_lightning_path:
+                mouse_click(pos[0],pos[1])
+                return (pos[0] + 84 , pos[1] + 111, pos[0] + 124,  pos[1] + 133)
 
-        if path == im_path:
-            path = im_snow_path
-            img_start = autopy.bitmap.Bitmap.open(path)
-        elif path == im_snow_path:
-            path = im_lightning_path
-            img_start = autopy.bitmap.Bitmap.open(path)
-        elif path == im_lightning_path:
-            path = im_path
-            img_start = autopy.bitmap.Bitmap.open(path)
+            if path == im_path:
+                path = im_snow_path
+                img_start = autopy.bitmap.Bitmap.open(path)
+            elif path == im_snow_path:
+                path = im_lightning_path
+                img_start = autopy.bitmap.Bitmap.open(path)
+            elif path == im_lightning_path:
+                path = im_path
+                img_start = autopy.bitmap.Bitmap.open(path)
+    except (KeyboardInterrupt, SystemExit):
+        print '\n! Received keyboard interrupt, quitting app.\n'
+        exit()
+
 
 def identify_gem(img_gem,row=0,col=0):
     global rmin,gmin,bmin,rmax,gmax,bmax
@@ -133,6 +140,7 @@ def build_board():
             x1 += x_pad
             x2 += x_pad
         print ''
+
 
 def find_move():
     global valid_move
@@ -337,7 +345,7 @@ def swap(x1,y1,x2,y2):
 
 def run(minutes=1):
     try:
-        t_end = time.time() + 60 * minutes
+        t_end = time.time() + 60 * float(minutes)
         while time.time() < t_end:
             build_board()
             find_move()
@@ -349,10 +357,12 @@ def run(minutes=1):
 def main(args):
     global str_pos
     click_close_play()
-    str_pos = find_start_location()
+
     if len(args) > 1:
-        run(int(args[1]))
+        str_pos = find_start_location(args[1])
+        run(float(args[1]))
     else:
+        str_pos = find_start_location()
         run()
 
 if __name__ == '__main__':
